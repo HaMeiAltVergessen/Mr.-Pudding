@@ -1,6 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3dviewport001"]
+[gd_scene load_steps=5 format=3 uid="uid://dl3l8knm7y0to"]
 
-[ext_resource type="Script" path="res://scripts/player/player_visual.gd" id="1_visual"]
+[ext_resource type="Script" uid="uid://btrhptyjt03wv" path="res://scripts/player/player_visual.gd" id="1_visual"]
+
+[sub_resource type="Environment" id="Environment_vp"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.8, 0.8, 0.8, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pudding"]
 albedo_color = Color(0.95, 0.85, 0.5, 1)
@@ -10,11 +15,6 @@ roughness = 0.7
 material = SubResource("StandardMaterial3D_pudding")
 radius = 0.3
 height = 0.8
-
-[sub_resource type="Environment" id="Environment_vp"]
-background_mode = 1
-ambient_light_source = 2
-ambient_light_color = Color(0.8, 0.8, 0.8, 1)
 
 [node name="PlayerVisual" type="SubViewportContainer"]
 offset_left = -32.0
@@ -26,8 +26,9 @@ script = ExtResource("1_visual")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
+handle_input_locally = false
 size = Vector2i(64, 64)
-render_target_update_mode = 3
+render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
@@ -41,4 +42,5 @@ transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.6
 environment = SubResource("Environment_vp")
 
 [node name="PuddingMesh" type="MeshInstance3D" parent="SubViewport"]
+transform = Transform3D(-0.129747, 0, -0.991547, 0, 1, 0, 0.991547, 0, -0.129747, 0, 0, 0)
 mesh = SubResource("CapsuleMesh_placeholder")

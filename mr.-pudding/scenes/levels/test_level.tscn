@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://ctestlevel001"]
+[gd_scene load_steps=9 format=3 uid="uid://ctestlevel001"]
 
 [ext_resource type="PackedScene" uid="uid://cplayer00001" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://cjumppad00001" path="res://scenes/objects/jump_pad.tscn" id="2_jumppad"]
 
 [sub_resource type="RectangleShape2D" id="shape_floor"]
 size = Vector2(2000, 40)
@@ -147,6 +148,13 @@ offset_top = -150.0
 offset_right = 20.0
 offset_bottom = 150.0
 color = Color(0.45, 0.35, 0.3, 1)
+
+[node name="JumpPad1" parent="Environment" instance=ExtResource("2_jumppad")]
+position = Vector2(200, 670)
+
+[node name="JumpPad2" parent="Environment" instance=ExtResource("2_jumppad")]
+position = Vector2(900, 670)
+launch_strength = 900.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
