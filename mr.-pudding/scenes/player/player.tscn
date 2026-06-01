@@ -1,34 +1,36 @@
-[gd_scene load_steps=8 format=3 uid="uid://cplayer00001"]
+[gd_scene load_steps=10 format=3 uid="uid://cplayer00001"]
 
-[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
-[ext_resource type="Script" path="res://scripts/state_machine/state_machine.gd" id="2_sm"]
-[ext_resource type="Script" path="res://scripts/states/ground_state.gd" id="3_ground"]
-[ext_resource type="Script" path="res://scripts/states/bounce_state.gd" id="4_bounce"]
-[ext_resource type="Script" path="res://scripts/states/claw_state.gd" id="5_claw"]
-[ext_resource type="PackedScene" uid="uid://c3dviewport001" path="res://scenes/player/player_3d_viewport.tscn" id="6_visual"]
-[ext_resource type="Script" path="res://resources/player_physics.gd" id="7_physics"]
+[ext_resource type="Script" uid="uid://rld3erwwnyl5" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://dsfg0uion1vwe" path="res://scripts/state_machine/state_machine.gd" id="2_sm"]
+[ext_resource type="Script" uid="uid://fojwc2av42li" path="res://scripts/states/ground_state.gd" id="3_ground"]
+[ext_resource type="Script" uid="uid://codstfrpwnii4" path="res://scripts/states/bounce_state.gd" id="4_bounce"]
+[ext_resource type="Script" uid="uid://k38qtu6sgwu3" path="res://scripts/states/claw_state.gd" id="5_claw"]
+[ext_resource type="PackedScene" uid="uid://dl3l8knm7y0to" path="res://scenes/player/player_3d_viewport.tscn" id="6_visual"]
+[ext_resource type="Script" uid="uid://celt7r5hebpvi" path="res://resources/player_physics.gd" id="7_physics"]
+
+[sub_resource type="Resource" id="Resource_physics"]
+script = ExtResource("7_physics")
+move_speed = 300.0
+sprint_multiplier = 3.0
+jump_velocity = -400.0
+gravity = 480.0
+acceleration = 2000.0
+friction = 1500.0
+air_control = 0.8
+bounce_threshold = 200.0
+bounce_factor = 0.9
+min_bounce_speed = 100.0
+bounce_cooldown = 0.15
+claw_deceleration = 800.0
+claw_max_grip_speed = 150.0
+claw_hang_duration = 3.0
+claw_slide_speed = 40.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
 radius = 16.0
 height = 48.0
 
-[sub_resource type="Resource" id="Resource_physics"]
-script = ExtResource("7_physics")
-move_speed = 300.0
-sprint_multiplier = 1.6
-jump_velocity = -500.0
-gravity = 980.0
-acceleration = 2000.0
-friction = 1500.0
-air_control = 0.6
-bounce_threshold = 400.0
-bounce_factor = 0.75
-min_bounce_speed = 100.0
-claw_deceleration = 800.0
-claw_max_grip_speed = 150.0
-
 [node name="Player" type="CharacterBody2D"]
-floor_stop_on_slope = true
 floor_max_angle = 0.8028
 script = ExtResource("1_player")
 physics = SubResource("Resource_physics")
@@ -40,8 +42,8 @@ shape = SubResource("CapsuleShape2D_player")
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("2_sm")
-player = NodePath("..")
 initial_state = NodePath("GroundState")
+player = NodePath("..")
 
 [node name="GroundState" type="Node" parent="StateMachine"]
 script = ExtResource("3_ground")

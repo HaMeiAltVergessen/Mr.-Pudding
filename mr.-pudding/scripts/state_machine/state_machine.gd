@@ -9,16 +9,42 @@ var states: Dictionary = {}
 
 
 func _ready() -> void:
+	# Debug: check if exports resolved
+	print("[StateMachine] _ready called")
+	print("[StateMachine] player export = ", player)
+	print("[StateMachine] initial_state export = ", initial_state)
+
+	# Fallback: if player export didn't resolve, find parent CharacterBody2D
+	if not player:
+		var parent := get_parent()
+		if parent is CharacterBody2D:
+			player = parent
+			print("[StateMachine] player resolved via parent: ", player)
+
+	# Fallback: if initial_state didn't resolve, use first State child
+	if not initial_state:
+		for child: Node in get_children():
+			if child is State:
+				initial_state = child
+				print("[StateMachine] initial_state resolved to first child: ", child.name)
+				break
+
 	for child: Node in get_children():
 		if child is State:
 			states[child.name] = child
 			child.player = player
 			child.state_machine = self
 			child.init()
+			print("[StateMachine] Registered state: ", child.name, " | player set: ", child.player != null)
+
+	print("[StateMachine] Total states: ", states.size())
 
 	if initial_state:
 		current_state = initial_state
 		current_state.enter()
+		print("[StateMachine] Entered initial state: ", current_state.name)
+	else:
+		push_error("[StateMachine] No initial state found!")
 
 
 func _process(delta: float) -> void:

@@ -3,10 +3,17 @@ extends State
 
 
 func enter(_msg: Dictionary = {}) -> void:
-	pass
+	print("[GroundState] Entered. Player = ", player, " | Physics = ", player.physics if player else "NO PLAYER")
 
 
 func physics_update(delta: float) -> void:
+	if not player:
+		print("[GroundState] ERROR: player is null!")
+		return
+	if not player.physics:
+		print("[GroundState] ERROR: player.physics is null!")
+		return
+
 	var phys: PlayerPhysics = player.physics
 
 	# Gravity

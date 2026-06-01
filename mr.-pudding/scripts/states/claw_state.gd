@@ -3,6 +3,7 @@ extends State
 
 var surface_normal: Vector2
 var grip_velocity: float
+var hang_timer: float
 
 
 func enter(_msg: Dictionary = {}) -> void:
@@ -10,10 +11,13 @@ func enter(_msg: Dictionary = {}) -> void:
 	var tangent: Vector2 = Vector2(-surface_normal.y, surface_normal.x)
 	grip_velocity = player.velocity.dot(tangent)
 	player.velocity = Vector2.ZERO
+	hang_timer = 0.0
 
 
 func physics_update(delta: float) -> void:
 	var phys: PlayerPhysics = player.physics
+
+	hang_timer += delta
 
 	# Decelerate toward zero
 	grip_velocity = move_toward(grip_velocity, 0.0, phys.claw_deceleration * delta)
@@ -28,10 +32,18 @@ func physics_update(delta: float) -> void:
 	var tangent: Vector2 = Vector2(-surface_normal.y, surface_normal.x)
 	player.velocity = tangent * grip_velocity
 
+	# Slide downward while clinging
+	player.velocity.y += phys.claw_slide_speed * delta
+
 	# Push into surface to maintain contact
 	player.velocity -= surface_normal * 10.0
 
 	player.move_and_slide()
+
+	# Exit: hang time expired
+	if hang_timer >= phys.claw_hang_duration:
+		state_machine.transition_to(&"GroundState")
+		return
 
 	# Exit: released claw
 	if Input.is_action_just_released(&"claw"):
