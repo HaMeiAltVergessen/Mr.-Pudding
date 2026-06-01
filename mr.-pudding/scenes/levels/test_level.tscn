@@ -1,0 +1,158 @@
+[gd_scene load_steps=8 format=3 uid="uid://ctestlevel001"]
+
+[ext_resource type="PackedScene" uid="uid://cplayer00001" path="res://scenes/player/player.tscn" id="1_player"]
+
+[sub_resource type="RectangleShape2D" id="shape_floor"]
+size = Vector2(2000, 40)
+
+[sub_resource type="RectangleShape2D" id="shape_wall"]
+size = Vector2(40, 800)
+
+[sub_resource type="RectangleShape2D" id="shape_ceiling"]
+size = Vector2(2000, 40)
+
+[sub_resource type="RectangleShape2D" id="shape_platform"]
+size = Vector2(200, 20)
+
+[sub_resource type="RectangleShape2D" id="shape_pillar"]
+size = Vector2(40, 300)
+
+[sub_resource type="GDScript" id="debug_label_script"]
+script/source = "extends Label
+
+@onready var player: Player = $\"../../Player\"
+@onready var state_machine: StateMachine = $\"../../Player/StateMachine\"
+
+
+func _process(_delta: float) -> void:
+	if not player or not state_machine or not state_machine.current_state:
+		return
+	var state_name: String = state_machine.current_state.name
+	var vel: Vector2 = player.velocity
+	var speed: float = vel.length()
+	text = \"State: %s\\nVelocity: (%.0f, %.0f)\\nSpeed: %.0f\" % [state_name, vel.x, vel.y, speed]
+"
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector2(324, 438)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="Floor" type="StaticBody2D" parent="Environment"]
+position = Vector2(640, 700)
+
+[node name="FloorShape" type="CollisionShape2D" parent="Environment/Floor"]
+shape = SubResource("shape_floor")
+
+[node name="FloorVisual" type="ColorRect" parent="Environment/Floor"]
+offset_left = -1000.0
+offset_top = -20.0
+offset_right = 1000.0
+offset_bottom = 20.0
+color = Color(0.3, 0.3, 0.35, 1)
+
+[node name="LeftWall" type="StaticBody2D" parent="Environment"]
+position = Vector2(-20, 360)
+
+[node name="LeftWallShape" type="CollisionShape2D" parent="Environment/LeftWall"]
+shape = SubResource("shape_wall")
+
+[node name="LeftWallVisual" type="ColorRect" parent="Environment/LeftWall"]
+offset_left = -20.0
+offset_top = -400.0
+offset_right = 20.0
+offset_bottom = 400.0
+color = Color(0.35, 0.3, 0.3, 1)
+
+[node name="RightWall" type="StaticBody2D" parent="Environment"]
+position = Vector2(1300, 360)
+
+[node name="RightWallShape" type="CollisionShape2D" parent="Environment/RightWall"]
+shape = SubResource("shape_wall")
+
+[node name="RightWallVisual" type="ColorRect" parent="Environment/RightWall"]
+offset_left = -20.0
+offset_top = -400.0
+offset_right = 20.0
+offset_bottom = 400.0
+color = Color(0.35, 0.3, 0.3, 1)
+
+[node name="Ceiling" type="StaticBody2D" parent="Environment"]
+position = Vector2(640, -20)
+
+[node name="CeilingShape" type="CollisionShape2D" parent="Environment/Ceiling"]
+shape = SubResource("shape_ceiling")
+
+[node name="CeilingVisual" type="ColorRect" parent="Environment/Ceiling"]
+offset_left = -1000.0
+offset_top = -20.0
+offset_right = 1000.0
+offset_bottom = 20.0
+color = Color(0.3, 0.35, 0.3, 1)
+
+[node name="Platform1" type="StaticBody2D" parent="Environment"]
+position = Vector2(400, 550)
+
+[node name="Platform1Shape" type="CollisionShape2D" parent="Environment/Platform1"]
+shape = SubResource("shape_platform")
+
+[node name="Platform1Visual" type="ColorRect" parent="Environment/Platform1"]
+offset_left = -100.0
+offset_top = -10.0
+offset_right = 100.0
+offset_bottom = 10.0
+color = Color(0.4, 0.4, 0.5, 1)
+
+[node name="Platform2" type="StaticBody2D" parent="Environment"]
+position = Vector2(800, 400)
+
+[node name="Platform2Shape" type="CollisionShape2D" parent="Environment/Platform2"]
+shape = SubResource("shape_platform")
+
+[node name="Platform2Visual" type="ColorRect" parent="Environment/Platform2"]
+offset_left = -100.0
+offset_top = -10.0
+offset_right = 100.0
+offset_bottom = 10.0
+color = Color(0.4, 0.4, 0.5, 1)
+
+[node name="Platform3" type="StaticBody2D" parent="Environment"]
+position = Vector2(600, 200)
+
+[node name="Platform3Shape" type="CollisionShape2D" parent="Environment/Platform3"]
+shape = SubResource("shape_platform")
+
+[node name="Platform3Visual" type="ColorRect" parent="Environment/Platform3"]
+offset_left = -100.0
+offset_top = -10.0
+offset_right = 100.0
+offset_bottom = 10.0
+color = Color(0.5, 0.4, 0.4, 1)
+
+[node name="TallPillar" type="StaticBody2D" parent="Environment"]
+position = Vector2(1050, 400)
+
+[node name="PillarShape" type="CollisionShape2D" parent="Environment/TallPillar"]
+shape = SubResource("shape_pillar")
+
+[node name="PillarVisual" type="ColorRect" parent="Environment/TallPillar"]
+offset_left = -20.0
+offset_top = -150.0
+offset_right = 20.0
+offset_bottom = 150.0
+color = Color(0.45, 0.35, 0.3, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DebugLabel" type="Label" parent="CanvasLayer"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 300.0
+offset_bottom = 80.0
+script = SubResource("debug_label_script")
